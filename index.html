@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xocoin Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div class="splash-screen">
+        <img class="splash-image" src="images/Start-screen.png" alt="Splash Image">
+        <div class="loading-text">Loading...</div>
+    </div>
+
+    <div class="container" style="display: none;">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <button id="languageSwitchBtn" class="language-button">🌐</button>
+            <div id="balanceContainer" class="balance-container">
+                <div id="balanceTitle">Balance</div>
+                <div id="balanceAmount">0</div>
+                <div id="userLevel" class="user-level">Level: <span id="currentLevelName">Starter</span></div>
+            </div>
+        </div>
+
+        <!-- Main Page -->
+        <div id="mainPage" class="screen-content active">
+            <main class="main-content">
+                <div class="clickable-image">
+                    <img id="clickableImg" src="images/4777.png" alt="Clickable Image">
+                </div>
+                <div class="energy-bar-container">
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="energyBar"></div>
+                    </div>
+                    <div id="energyInfo">10,000/10,000⚡</div>
+                </div>
+            </main>
+            <button id="levelFloatingBtn" class="level-button-floating">🏆</button>
+        </div>
+
+        <!-- Account Page -->
+        <div id="accountPage" class="screen-content scrollable">
+            <section class="user-info-card">
+                <div class="profile-pic" id="profilePicDefault">X</div>
+                <div class="user-info-text">
+                    <div class="user-name"><span id="userTelegramName">Username</span></div>
+                    <div class="user-id"><span id="userTelegramId">123456</span></div>
+                </div>
+            </section>
+            <div class="diamond-balance-container">
+                <img src="images/diamond.png" alt="Diamond Image" class="diamond-icon">
+                <span id="diamondBalance">0</span>
+            </div>
+            <div class="invite-section">
+                <button class="invite-more" id="inviteFriendsBtn">Invite Friends</button>
+                <button class="invite-more" id="copyInviteLinkBtn">Copy Link</button>
+            </div>
+            <p id="inviteInfo">Invite a friend and you both get 20,000 coins and 10,000 diamonds!</p>
+            <ul id="friendsList" class="friends-list"></ul>
+        </div>
+
+        <!-- Boosts Page -->
+        <div id="boostsPage" class="screen-content scrollable">
+            <section class="boosts-container centered">
+                <div class="boost-item">
+                    <img src="images/Click-Boosts.png" alt="Boost Image" class="boost-icon">
+                    <p>Click Multiplier ×<span id="clickMultiplier">2</span></p>
+                    <p>Upgrade Cost: <span id="boostUpgradeCost">2500</span> Coins</p>
+                    <button id="boostUpgradeBtn">Upgrade</button>
+                </div>
+                <div class="boost-item">
+                    <img src="images/energy-Boosts1.png" alt="Coin Boost Image" class="boost-icon">
+                    <p>Max Coins: <span id="coinBoostLevel">10,000</span></p>
+                    <p>Upgrade Cost: <span id="coinUpgradeCost">2500</span> Coins</p>
+                    <button id="coinUpgradeBtn">Upgrade</button>
+                </div>
+                <div class="boost-item">
+                    <img src="images/energy-Boosts.png" alt="Energy Boost Image" class="boost-icon">
+                    <p>Fill energy (3 available)</p>
+                    <p>Upgrade Cost: <span id="fillEnergyUpgradeCost">2500</span> Coins</p>
+                    <button id="fillEnergyBtn">Fill Energy</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tasks Page -->
+        <div id="tasksPage" class="screen-content scrollable">
+            <p>Complete daily tasks to earn more rewards!</p>
+            <img src="images/Tasks1.png" alt="Tasks Image" class="task-image">
+            <section class="task-container">
+                <div class="task-item">
+                    <p>Invite 3 friends to earn a reward</p>
+                    <p>Reward: 100,000 Coins</p>
+                    <p>Progress: <span id="taskTwoProgress">0/3</span></p>
+                    <button id="taskTwoBtn" class="task-button inactive">Claim</button>
+                </div>
+                <div class="task-item">
+                    <p>Invite 10 friends to earn a reward</p>
+                    <p>Reward: 1,000,000 Coins</p>
+                    <p>Progress: <span id="taskThreeProgress">0/10</span></p>
+                    <button id="taskThreeBtn" class="task-button inactive">Claim</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Wallet Page -->
+        <div id="walletPage" class="screen-content scrollable">
+            <section class="wallet-container">
+                <img src="images/coin-wallet.png" alt="Wallet Image" class="wallet-image">
+                <h2>Wallet</h2>
+                <button id="withdrawBtn" class="wallet-button">Withdraw</button>
+                <p class="coming-soon">Coming Soon</p>
+                <div id="withdrawalForm" style="display:none;">
+                    <input type="text" id="withdrawAddress" class="withdraw-input" placeholder="Add Withdrawal Address">
+                    <div class="withdraw-input-container">
+                        <input type="number" id="withdrawAmount" class="withdraw-input" placeholder="Add Amount">
+                        <button id="maxWithdrawBtn" class="max-button">Max</button>
+                    </div>
+                    <button id="confirmWithdrawalBtn" class="wallet-button">Withdraw</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Levels Page -->
+        <div id="levelPage" class="screen-content scrollable">
+            <section class="level-container">
+                <div class="level-icon">🏆</div>
+                <h2>Levels</h2>
+                <!-- Level 10 -->
+                <div class="level-item" id="levelTen">
+                    <img src="images/Elite.png" alt="Level 10 Image" class="level-image">
+                    <p>Elite</p>
+                    <p>20M ×2</p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="levelTenProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- Level 9 -->
+                <div class="level-item" id="levelNine">
+                    <img src="images/Diamond1.png" alt="Level 9 Image" class="level-image">
+                    <p>Diamond</p>
+                    <p>15M ×2</p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="levelNineProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- Level 8 -->
+                <div class="level-item" id="levelEight">
+                    <img src="images/Platinum.png" alt="Level 8 Image" class="level-image">
+                    <p>Platinum</p>
+                    <p>10M ×2</p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="levelEightProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- Level 7 -->
+                <div class="level-item" id="levelSeven">
+                    <img src="images/Gold.png" alt="Level 7 Image" class="level-image">
+                    <p>Gold</p>
+                    <p>7M ×2</p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="levelSevenProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- Level 6 -->
+                <div class="level-item" id="levelSix">
+                    <img src="images/Silver.png" alt="Level 6 Image" class="level-image">
+                    <p>Silver</p>
+                    <p>4M ×2</p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="levelSixProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- Level 5 -->
+                <div class="level-item" id="levelFive">
+                    <img src="images/Bronze.png" alt="Level 5 Image" class="level-image">
+                    <p>Bronze</p>
+                    <p>2M ×2</p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="levelFiveProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- Level 4 -->
+                <div class="level-item" id="levelFour">
+                    <img src="images/Advanced.png" alt="Level 4 Image" class="level-image">
+                    <p>Advanced</p>
+                    <p>1M ×2</p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="levelFourProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- Level 3 -->
+                <div class="level-item" id="levelThree">
+                    <img src="images/Intermediate.png" alt="Level 3 Image" class="level-image">
+                    <p>Intermediate</p>
+                    <p>700K ×2</p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="levelThreeProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- Level 2 -->
+                <div class="level-item" id="levelTwo">
+                    <img src="images/Novice.png" alt="Level 2 Image" class="level-image">
+                    <p>Novice</p>
+                    <p>300K ×2</p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="levelTwoProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- Level 1 -->
+                <div class="level-item" id="levelOne">
+                    <img src="images/Starter.png" alt="Level 1 Image" class="level-image">
+                    <p>Starter</p>
+                    <p>100K ×2</p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" id="levelOneProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Notifications -->
+        <div id="copyInviteNotification" class="notification top-notification">Invite link copied!</div>
+        <div id="purchaseNotification" class="notification top-notification"></div>
+
+        <div id="upgradeConfirmation" class="confirmation-modal" style="display:none;">
+            <p id="upgradeText">Are you sure you want to upgrade?</p>
+            <div class="confirmation-buttons">
+                <button id="confirmUpgradeBtn" class="game-button">Yes</button>
+                <button id="cancelUpgradeBtn" class="game-button">No</button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="menu">
+            <button data-target="accountPage">
+                <img src="images/friends.png" alt="Account">
+                Friends 
+            </button>
+            <button data-target="boostsPage">
+                <img src="images/Boosts.png" alt="Boosts">
+                Boosts
+            </button>
+            <button data-target="mainPage">
+                <img src="images/4777.png" alt="Play">
+                Tap
+            </button>
+            <button data-target="tasksPage">
+                <img src="images/Tasks.png" alt="Tasks">
+                Tasks
+            </button>
+            <button data-target="walletPage">
+                <img src="images/Wallet.png" alt="Wallet">
+                Wallet
+            </button>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+  </html>
