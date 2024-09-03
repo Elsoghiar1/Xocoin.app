@@ -1,0 +1,662 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+:root {
+    --primary-color: #00ffea;
+    --secondary-color: #ff00f0;
+    --background-color-dark: #000000;
+    --text-color-dark: #c0c0c0;
+    --text-color-light: #ffffff;
+    --button-bg: #2a2a2a;
+    --button-text-color: #ffffff;
+    --accent-color: #1f1f1f;
+    --hover-color: #1a1a1a;
+    --boost-item-bg: #222831;
+    --task-item-bg: #2e2e2e;
+    --claimed-bg: #00ffea;
+    --claimed-text-color: #000000;
+    --task-font-size: 14px;
+    --boost-font-size: 14px;
+    --claim-button-size: 12px;
+    --small-text-size: 12px;
+    --current-level-border: #e0e0e0; /* لون حواف المستوي الحالي */
+}
+
+/* إزالة تأثير التركيز */
+button, input, select, textarea, img, a {
+    outline: none;
+    box-shadow: none;
+    border: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    background-color: var(--background-color-dark);
+    color: var(--text-color-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.container {
+    width: 100%;
+    max-width: 450px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    background-image: url('images/Screen-wallpaper.png'); /* إضافة خلفية للشاشة الرئيسية */
+    background-size: cover;
+    background-position: center;
+}
+
+.screen-content {
+    flex: 1;
+    display: none;
+    padding: 10px;
+    position: relative;
+    background: inherit;
+    overflow: hidden;
+}
+
+.screen-content.scrollable {
+    overflow-y: auto;
+}
+
+.screen-content.active {
+    display: block;
+}
+
+.splash-screen {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: var(--background-color-dark);
+    position: relative;
+}
+
+.splash-image {
+    width: 130px;
+    height: 130px;
+    object-fit: contain;
+    animation: float 2s ease-in-out infinite;
+}
+
+.loading-text {
+    color: var(--text-color-light);
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.status-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background: inherit;
+    position: relative;
+}
+
+.balance-container {
+    text-align: center;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#balanceTitle {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#balanceAmount {
+    font-size: 28px;
+    margin-top: 0;
+}
+
+.user-level {
+    font-size: 14px;
+    color: var(--primary-color);
+}
+
+.language-button {
+    position: absolute;
+    left: 10px;
+    background-color: var(--button-bg);
+    color: var(--text-color-light);
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.language-button:hover {
+    background-color: var(--hover-color);
+}
+
+.energy-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.progress-bar {
+    width: 160px;
+    height: 20px;
+    background-color: var(--accent-color);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.progress-bar-inner {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #c0c0c0, #f5f5f5);
+    transition: width 0.5s ease;
+}
+
+#energyInfo {
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 3px;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 70px);
+}
+
+.clickable-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.clickable-image img {
+    width: 200px;
+    height: 200px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.2s ease-in-out, filter 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.clickable-image img:active {
+    transform: scale(0.95);
+    filter: brightness(1.2);
+}
+
+@keyframes coin-bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+.diamond-coin {
+    position: absolute;
+    width: 17px;
+    height: 17px;
+    background-image: url('images/Start-screen.png');
+    background-size: cover;
+    pointer-events: none;
+    animation: coin-bounce 1s infinite;
+    z-index: 9999;
+}
+
+.diamond-coin span {
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    color: var(--text-color-light);
+    font-size: 12px;
+    font-weight: bold;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    background-color: transparent;
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 10px);
+    left: 5px;
+    right: 5px;
+    border-radius: 15px;
+    z-index: 1000;
+}
+
+.menu button {
+    background-color: transparent;
+    color: inherit;
+    border: none;
+    padding: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    transition: background-color 0.3s ease;
+    border-radius: 25px;
+}
+
+.menu button img {
+    width: 18px;
+    height: 18px;
+    margin-bottom: 3px;
+}
+
+.menu button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu button.active {
+    border: 2px solid #ffffff;
+    border-radius: 25px;
+}
+
+.user-info-card {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: var(--button-bg);
+    padding: 10px;
+    border-radius: 15px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--button-bg);
+    color: var(--text-color-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.user-name, .user-id {
+    font-size: 14px;
+    color: var(--text-color-light);
+}
+
+.account-diamond-icon {
+    display: block;
+    width: 80px;
+    height: auto;
+    margin: 0 auto 10px auto;
+}
+
+.diamond-balance-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: var(--button-bg);
+    padding: 8px;
+    border-radius: 15px;
+    width: 14%; /* تصغير عرض خانة الألماس */
+    margin-top: 10px;
+}
+
+.diamond-balance-container img {
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
+}
+
+.invite-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.invite-more {
+    background-color: var(--button-bg);
+    color: var (--button-text-color);
+    border: none;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+}
+
+.invite-more:hover {
+    background-color: var(--hover-color);
+}
+
+#inviteInfo {
+    font-size: 14px;
+    color: var(--text-color-dark);
+    text-align: center;
+    margin-top: 10px;
+}
+
+.friends-list {
+    margin-top: 10px;
+    padding: 0;
+    list-style: none;
+    color: var (--text-color-light);
+    width: 100%;
+    padding: 5px;
+    background-color: var(--accent-color);
+    border-radius: 15px;
+}
+
+.friends-list li {
+    padding: 10px;
+    border-bottom: 1px solid var(--text-color-dark);
+}
+
+.friends-list li:last-child {
+    border-bottom: none;
+}
+
+.boosts-container, .task-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+}
+
+.boost-item, .task-item {
+    width: 100%;
+    max-width: 300px;
+    margin: 10px 0;
+    padding: 8px;
+    background-color: var(--button-bg);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.boost-item p, .task-item p {
+    margin: 0;
+    padding: 0;
+    width: 60%;
+    text-align: left;
+    color: var(--text-color-dark);
+    font-size: var(--task-font-size);
+}
+
+.boost-item img, .task-item img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.boost-item button, .task-item button {
+    background-color: #000000;
+    color: #c0c0c0;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 30%;
+    transition: background-color 0.3s;
+    border: none;
+    font-size: var(--claim-button-size);
+    border: 1px solid #ffffff;
+}
+
+.boost-item button:hover, .task-item button:hover {
+    background-color: var(--hover-color);
+}
+
+.task-item button.inactive {
+    background-color: #808080;
+}
+
+.task-item button.claimed {
+    background-color: var(--claimed-bg);
+    color: var(--claimed-text-color);
+}
+
+.task-image {
+    width: 70px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.confirmation-modal {
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    margin-top: -20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.confirmation-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.confirmation-buttons .game-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: var(--button-bg);
+    color: var(--button-text-color);
+    transition: background-color 0.3s ease;
+}
+
+.confirmation-buttons .game-button:hover {
+    background-color: var(--hover-color);
+}
+
+.notification {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--button-bg);
+    color: var(--text-color-light);
+    padding: 12px 25px;
+    border-radius: 15px;
+    opacity: 0;
+    font-size: 16px;
+    z-index: 1000;
+    transition: opacity 0.5s ease;
+}
+
+.notification.show {
+    opacity: 1;
+}
+
+.level-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.level-icon {
+    font-size: 48px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.level-item {
+    margin: 10px 0;
+    text-align: center;
+    background-color: var(--button-bg);
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 300px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.level-item img {
+    width: 50px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.level-item.current-level {
+    border: 2px solid var(--current-level-border); /* حواف المستوى الحالي */
+    box-shadow: 0 0 15px #d9d9d9; /* ظل مائل للفضي */
+}
+
+.wallet-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.wallet-image {
+    width: 70px;
+    height: auto;
+}
+
+.wallet-button {
+    background-color: var(--button-bg);
+    color: var(--button-text-color);
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 300px;
+}
+
+.wallet-button:hover {
+    background-color: var(--hover-color);
+}
+
+.coming-soon {
+    color: var(--text-color-dark);
+    font-size: 12px;
+    margin-top: -10px;
+}
+
+.withdraw-input {
+    width: 100%;
+    max-width: 300px;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--accent-color);
+    background-color: var(--background-color-dark);
+    color: var(--text-color-light);
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.withdraw-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.max-button {
+    background-color: var(--button-bg);
+    color: var(--text-color-light);
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.max-button:hover {
+    background-color: var(--hover-color);
+}
+
+.level-button-floating {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background-color: var(--button-bg);
+    color: var(--button-text-color);
+    padding: 12px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.level-button-floating:hover {
+    background-color: var(--hover-color);
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.level-image {
+    width: 50px;
+    height: auto;
+    margin-bottom: 10px;
+  }
